@@ -1,0 +1,293 @@
+<!-- prettier-ignore-start -->
+<!-- eslint-disable -->
+
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Home{% endblock %}
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<!-- Statistics Cards -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Total Revenue</h6>
+                    <h3>₹{{ total_revenue|floatformat:2 }}</h3>
+                    <small class="{% if revenue_growth >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        <i class="fas fa-arrow-{% if revenue_growth >= 0 %}up{% else %}down{% endif %}"></i> 
+                        {{ revenue_growth|floatformat:1 }}% this month
+                    </small>
+                </div>
+                <div class="icon icon-success">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Total Sales</h6>
+                    <h3>{{ total_sales }}</h3>
+                    <small class="text-muted">{{ month_sales }} this month</small>
+                </div>
+                <div class="icon icon-primary">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Total Customers</h6>
+                    <h3>{{ total_customers }}</h3>
+                    <small class="text-muted">Active customers</small>
+                </div>
+                <div class="icon icon-warning">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Net Profit</h6>
+                    <h3>₹{{ net_profit|floatformat:2 }}</h3>
+                    <small class="text-muted">This month</small>
+                </div>
+                <div class="icon icon-danger">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row mt-4">
+    <!-- Revenue Chart -->
+    <div class="col-md-8">
+        <div class="chart-container" style="height: 400px;">
+            <h5 class="mb-4">Revenue Trends (Last 6 Months)</h5>
+            <div style="position: relative; height: 320px;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Daily Revenue -->
+    <div class="col-md-4">
+        <div class="chart-container" style="height: 400px;">
+            <h5 class="mb-4">Daily Revenue (This Month)</h5>
+            <div style="position: relative; height: 320px;">
+                <canvas id="dailyChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity and Top Products -->
+<div class="row mt-4">
+    <!-- Recent Sales -->
+    <div class="col-md-7">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Recent Sales</h5>
+                <a href="{% url 'dashboard:sales_list' %}" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            
+            {% if recent_sales %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sale in recent_sales %}
+                        <tr>
+                            <td><strong>{{ sale.invoice_number }}</strong></td>
+                            <td>{{ sale.customer.name }}</td>
+                            <td>{{ sale.product.name }}</td>
+                            <td>₹{{ sale.total_amount|floatformat:2 }}</td>
+                            <td>
+                                <span class="badge badge-status-{{ sale.status }}">
+                                    {{ sale.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No sales yet. 
+                <a href="{% url 'dashboard:sale_create' %}">Create your first sale</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Top Products and Goals -->
+    <div class="col-md-5">
+        <!-- Top Products -->
+        <div class="table-container mb-3">
+            <h5 class="mb-3">Top Products</h5>
+            {% if top_products %}
+            <ul class="list-group list-group-flush">
+                {% for product in top_products %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ product.product__name }}</strong>
+                        <br>
+                        <small class="text-muted">{{ product.total_quantity }} sold</small>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">
+                        ₹{{ product.total_revenue|floatformat:2 }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted text-center py-3">
+                <i class="fas fa-box-open"></i><br>
+                No product sales yet
+            </p>
+            {% endif %}
+        </div>
+        
+        <!-- Active Goals -->
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Active Goals</h5>
+                <a href="{% url 'dashboard:goals_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            
+            {% if active_goals %}
+            {% for goal in active_goals %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <small><strong>{{ goal.title }}</strong></small>
+                    <small class="fw-bold text-primary">{{ goal.progress_percentage|floatformat:0 }}%</small>
+                </div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar 
+                        {% if goal.progress_percentage >= 100 %}bg-success
+                        {% elif goal.progress_percentage >= 75 %}bg-info
+                        {% elif goal.progress_percentage >= 50 %}bg-warning
+                        {% else %}bg-danger{% endif %}" 
+                        role="progressbar" 
+                        style="width: {{ goal.progress_percentage }}%"
+                        aria-valuenow="{{ goal.progress_percentage }}" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">
+                    </div>
+                </div>
+                <small class="text-muted">
+                    ₹{{ goal.current_amount|floatformat:2 }} / ₹{{ goal.target_amount|floatformat:2 }}
+                </small>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted text-center py-3">
+                <i class="fas fa-bullseye"></i><br>
+                No active goals. <a href="{% url 'dashboard:goal_create' %}">Create one</a>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="stat-card">
+            <h5 class="mb-3"><i class="fas fa-bolt text-warning"></i> Quick Actions</h5>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{% url 'dashboard:sale_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> New Sale
+                </a>
+                <a href="{% url 'dashboard:customer_create' %}" class="btn btn-success">
+                    <i class="fas fa-user-plus"></i> Add Customer
+                </a>
+                <a href="{% url 'dashboard:product_create' %}" class="btn btn-info text-white">
+                    <i class="fas fa-box"></i> Add Product
+                </a>
+                <a href="{% url 'dashboard:expense_create' %}" class="btn btn-warning text-white">
+                    <i class="fas fa-money-bill"></i> Add Expense
+                </a>
+                <a href="{% url 'dashboard:analytics' %}" class="btn btn-secondary">
+                    <i class="fas fa-chart-bar"></i> View Analytics
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Month Summary -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="stat-card">
+            <h5 class="mb-3"><i class="fas fa-calendar-alt text-info"></i> This Month Summary</h5>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <h6 class="text-muted">Revenue</h6>
+                        <h4 class="text-success">₹{{ month_revenue|floatformat:2 }}</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <h6 class="text-muted">Expenses</h6>
+                        <h4 class="text-danger">₹{{ month_expenses|floatformat:2 }}</h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <h6 class="text-muted">Net Profit</h6>
+                        <h4 class="{% if net_profit >= 0 %}text-success{% else %}text-danger{% endif %}">
+                            ₹{{ net_profit|floatformat:2 }}
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3">
+                        <h6 class="text-muted">Total Sales</h6>
+                        <h4 class="text-primary">{{ month_sales }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Parse data from Django
+const chartLabels = {{ chart_labels|safe }};
+const chartRevenue = {{ chart_revenue|safe }};
+const dailyLabels = {{ daily_labels|safe }};
+const dailyRevenueData = {{ daily_revenue_data|safe }};
+
+// Create charts using functions from charts.js
+createRevenueChart('revenueChart', chartLabels, chartRevenue);
+createBarChart('dailyChart', dailyLabels, dailyRevenueData);
+</script>
+{% endblock %}

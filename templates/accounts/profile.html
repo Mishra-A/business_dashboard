@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile{% endblock %}
+{% block page_title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="stat-card text-center">
+            {% if user.profile.profile_picture %}
+            <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle mb-3" 
+                 style="width: 150px; height: 150px; object-fit: cover;" alt="Profile">
+            {% else %}
+            <img src="https://ui-avatars.com/api/?name={{ user.get_full_name|urlencode }}&size=150&background=4F46E5&color=fff" 
+                 class="rounded-circle mb-3" alt="Profile">
+            {% endif %}
+            <h4>{{ user.get_full_name|default:user.username }}</h4>
+            <p class="text-muted">@{{ user.username }}</p>
+            <p class="text-muted"><i class="fas fa-envelope"></i> {{ user.email }}</p>
+            
+            <div class="mt-4">
+                <small class="text-muted">Member since</small><br>
+                <strong>{{ user.date_joined|date:"M d, Y" }}</strong>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="stat-card">
+            <h5 class="mb-4"><i class="fas fa-user-edit"></i> Update Profile</h5>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <h6 class="mb-3 text-primary">Account Information</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Username</label>
+                        {{ u_form.username }}
+                        {% if u_form.username.errors %}
+                        <div class="text-danger small">{{ u_form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Email</label>
+                        {{ u_form.email }}
+                        {% if u_form.email.errors %}
+                        <div class="text-danger small">{{ u_form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>First Name</label>
+                        {{ u_form.first_name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Last Name</label>
+                        {{ u_form.last_name }}
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <h6 class="mb-3 text-primary">Profile Details</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Company Name</label>
+                        {{ p_form.company_name }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Phone</label>
+                        {{ p_form.phone }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>City</label>
+                        {{ p_form.city }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Country</label>
+                        {{ p_form.country }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label>Address</label>
+                    {{ p_form.address }}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Date of Birth</label>
+                        {{ p_form.date_of_birth }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Profile Picture</label>
+                        {{ p_form.profile_picture }}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label>Bio</label>
+                    {{ p_form.bio }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update Profile
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

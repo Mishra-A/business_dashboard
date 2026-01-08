@@ -1,0 +1,257 @@
+/* ========================================
+   Dashboard Custom Styles
+   ======================================== */
+
+:root {
+    --primary-color: #4F46E5;
+    --secondary-color: #10B981;
+    --danger-color: #EF4444;
+    --warning-color: #F59E0B;
+    --dark-color: #1F2937;
+    --light-bg: #F9FAFB;
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--primary-color) 0%, #3730A3 100%);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    padding: 20px 0;
+    z-index: 1000;
+}
+
+.sidebar-brand {
+    padding: 15px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+}
+
+.sidebar-menu li a {
+    display: block;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.sidebar-menu li a:hover,
+.sidebar-menu li a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left: 4px solid white;
+}
+
+.sidebar-menu li a i {
+    width: 25px;
+    margin-right: 10px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+/* Top Navbar */
+.top-navbar {
+    background: white;
+    padding: 15px 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Statistics Cards */
+.stat-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.stat-card h6 {
+    color: #6B7280;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.stat-card h3 {
+    color: var(--dark-color);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.stat-card .icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* Icon Colors */
+.icon-primary { 
+    background-color: rgba(79, 70, 229, 0.1); 
+    color: var(--primary-color); 
+}
+
+.icon-success { 
+    background-color: rgba(16, 185, 129, 0.1); 
+    color: var(--secondary-color); 
+}
+
+.icon-warning { 
+    background-color: rgba(245, 158, 11, 0.1); 
+    color: var(--warning-color); 
+}
+
+.icon-danger { 
+    background-color: rgba(239, 68, 68, 0.1); 
+    color: var(--danger-color); 
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    height: 400px;
+}
+
+.chart-container canvas {
+    max-height: 350px !important;
+}
+
+/* Table Container */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #3730A3;
+    border-color: #3730A3;
+}
+
+/* Badge Styles */
+.badge-status-completed {
+    background-color: var(--secondary-color);
+}
+
+.badge-status-pending {
+    background-color: var(--warning-color);
+}
+
+.badge-status-cancelled {
+    background-color: var(--danger-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 0;
+        overflow: hidden;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Loading Spinner */
+.spinner-border {
+    color: var(--primary-color);
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+}
+
+/* Progress Bars */
+.progress {
+    background-color: #E5E7EB;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+}
+
+
+
+/* Password Reset Pages */
+.password-reset-card {
+    max-width: 500px;
+    margin: 50px auto;
+}
+
+.password-reset-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.password-reset-icon i {
+    color: white;
+    font-size: 40px;
+}
+
+/* Email sent animation */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.password-reset-card {
+    animation: slideInUp 0.5s ease-out;
+}
