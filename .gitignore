@@ -1,0 +1,43 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Virtualenvs
+venv*/
+env*/
+.venv*/
+
+# Django
+*.log
+local.sqlite3
+db.sqlite3
+staticfiles/
+media/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+.DS_Store?
+
+# Migrations (keep)
+# */migrations/0*.py
+
+# Temporary files
+*.tmp
+*.temp
+
+# Render-specific
+data.json
+
+# venv_win (Windows virtualenv)
+venv_win/
