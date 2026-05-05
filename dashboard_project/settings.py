@@ -28,9 +28,9 @@ from django.core.management.utils import get_random_secret_key
 SECRET_KEY = os.environ.get('SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+DEBUG = True
 
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1'] if DEBUG else ['.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
